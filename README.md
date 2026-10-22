@@ -29,8 +29,11 @@ git clone https://github.com/ivantrj/firetv-glass-launcher.git && cd firetv-glas
 python3 -m venv .venv && .venv/bin/pip install adb-shell
 ```
 
+Tell the scripts where your TV is. Replace `192.168.0.42` with the IP address from step 3.
+This saves it in a `.tv-ip` file, so you only do it once:
+
 ```bash
-echo 192.168.0.42 > .tv-ip   # your TV's IP
+echo 192.168.0.42 > .tv-ip
 ```
 
 ```bash
