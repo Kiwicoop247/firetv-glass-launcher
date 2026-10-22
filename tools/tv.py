@@ -29,7 +29,7 @@ def tv_ip():
         with open(IP_FILE) as f:
             ip = f.readline().strip()
     if not ip:
-        sys.exit("No TV address. Run: echo 192.168.x.x > .tv-ip  (or set TV_IP)")
+        sys.exit("No TV address yet. Run ./setup.sh first.")
     return ip
 
 

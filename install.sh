@@ -3,12 +3,21 @@
 #   ./install.sh             build + install + set as default home + disable Amazon launcher
 #   ./install.sh --no-home   build + install + open it, leave the default home alone
 # Needs: JDK 17+, Android SDK (sdk.dir in launcher/local.properties), Python venv in .venv
-# (see README). TV address: .tv-ip file or TV_IP env var.
+# (./setup.sh creates both). TV address: .tv-ip file or TV_IP env var.
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"
 TV="$DIR/tools/tv"
 PKG=com.ivantrj.glasslauncher
 APK="$DIR/launcher/app/build/outputs/apk/debug/app-debug.apk"
+
+# Use Android Studio's bundled Java when there's no other one
+if ! java -version >/dev/null 2>&1 && [ -z "$JAVA_HOME" ]; then
+  JBR="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+  [ -d "$JBR" ] && export JAVA_HOME="$JBR"
+fi
+if [ ! -f "$DIR/launcher/local.properties" ]; then
+  echo "Android SDK not set up yet. Run ./setup.sh first."; exit 1
+fi
 
 echo "== Building"
 (cd "$DIR/launcher" && ./gradlew -q assembleDebug)

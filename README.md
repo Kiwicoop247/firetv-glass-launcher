@@ -13,48 +13,51 @@ hand, and no new apps beyond the launcher.
 
 ## Quick start
 
-On the TV:
+You need a Mac on the same Wi-Fi as your Fire TV. To build the launcher you also need
+[Android Studio](https://developer.android.com/studio) (install it and open it once).
 
-1. **Settings > My Fire TV > About**: click the device name 7 times to unlock Developer Options.
-2. **Settings > My Fire TV > Developer Options**: turn on **ADB debugging**.
-3. **Settings > My Fire TV > About > Network**: note the IP address.
+### 1. On the TV
 
-On your Mac (needs Python 3, JDK 17+ and the Android SDK):
+1. Go to **Settings > My Fire TV > About** and click your device's name **7 times**.
+   You'll see "You are now a developer".
+2. Go back to **Settings > My Fire TV > Developer Options** and turn on **ADB debugging**.
 
-```bash
-git clone https://github.com/ivantrj/firetv-glass-launcher.git && cd firetv-glass-launcher
-```
+### 2. On your Mac
 
-```bash
-python3 -m venv .venv && .venv/bin/pip install adb-shell
-```
+1. [Download this project as a ZIP](https://github.com/ivantrj/firetv-glass-launcher/archive/refs/heads/main.zip)
+   and double-click it to unzip.
+2. Open the **Terminal** app, type `cd ` (with a space), drag the unzipped folder into the
+   Terminal window, and press Enter.
+3. Run the setup and follow what it says:
 
-Tell the scripts where your TV is. Replace `192.168.0.42` with the IP address from step 3.
-This saves it in a `.tv-ip` file, so you only do it once:
+   ```bash
+   ./setup.sh
+   ```
 
-```bash
-echo 192.168.0.42 > .tv-ip
-```
+   It asks for your TV's IP address and tells you where to find it on the TV. When the TV asks
+   **Allow USB debugging?**, tick **Always allow** and choose **OK**.
 
-```bash
-echo "sdk.dir=$HOME/Library/Android/sdk" > launcher/local.properties
-```
-
-```bash
-./debloat.sh    # disable Amazon's telemetry, ads and preloads
-```
+### 3. Clean up the TV and install Glass
 
 ```bash
-./install.sh    # build Glass, install it, make it the home screen
+./debloat.sh
 ```
 
-The first command that talks to the TV makes it ask **Allow USB debugging?**. Tick
-"Always allow" and accept.
+Switches off Amazon's ads, tracking and preinstalled extras.
+
+```bash
+./install.sh
+```
+
+Installs Glass and makes it your home screen. That's it.
+
+If your TV later gets a new IP address, run `./setup.sh` again.
 
 ## What's in the repo
 
 | Path | What it is |
 |---|---|
+| `setup.sh` | One-time setup: installs the TV helper, asks for your TV's IP, checks the connection |
 | `debloat.sh` | Disables everything in `debloat/disable-list.txt` (safe to re-run) |
 | `restore.sh` | Re-enables one package, or everything, and gives Home back to Amazon |
 | `install.sh` | Builds Glass, installs it, makes it the home screen |
