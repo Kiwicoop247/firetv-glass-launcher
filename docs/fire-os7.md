@@ -1,3 +1,5 @@
+> On the `violet-horizon` branch, follow [the current setup guide](violet-horizon/INSTALL.md) and [dashboard report](violet-horizon/REPORT.md). The historical compatibility-only notes below describe the separate `fire-os-7-support` branch, including its opt-in flag and offline permissions.
+
 # Fire OS 7 / Android 9 source build
 
 Tested on **Fire TV Stick Lite, AFTSS (sheldon), Fire OS 7.7.1.7, firmware

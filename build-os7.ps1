@@ -25,7 +25,13 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Policy test compilation failed.' }
     & "$env:JAVA_HOME/bin/java.exe" -cp $testDir com.ivantrj.glasslauncher.HomeRedirectPolicyTest
     if ($LASTEXITCODE -ne 0) { throw 'Policy tests failed.' }
-    & (Join-Path $PSScriptRoot 'launcher/gradlew.bat') -p (Join-Path $PSScriptRoot 'launcher') --no-daemon -PfireOs7=true lintDebug assembleDebug
+    foreach ($test in @('DashboardTime','PanelNavigation','SportsTime','SportsScore')) {
+        & "$env:JAVA_HOME/bin/javac.exe" -encoding UTF-8 -d $testDir (Join-Path $PSScriptRoot "launcher/app/src/main/java/com/ivantrj/glasslauncher/$test.java") (Join-Path $PSScriptRoot "tests/$($test)Test.java")
+        if ($LASTEXITCODE -ne 0) { throw "$test compilation failed." }
+        & "$env:JAVA_HOME/bin/java.exe" -cp $testDir "com.ivantrj.glasslauncher.$($test)Test"
+        if ($LASTEXITCODE -ne 0) { throw "$test tests failed." }
+    }
+    & (Join-Path $PSScriptRoot 'launcher/gradlew.bat') -p (Join-Path $PSScriptRoot 'launcher') --no-daemon lintDebug assembleDebug
     if ($LASTEXITCODE -ne 0) { throw 'Build or lint failed; do not install.' }
 } finally {
     $env:JAVA_HOME=$previousJava

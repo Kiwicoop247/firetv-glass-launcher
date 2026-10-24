@@ -1,201 +1,62 @@
-# Fire TV Glass
+# Violet Horizon
 
-**Your Fire TV, minus the ads and the tracking.**
+A purple, widget-first Fire TV dashboard built on [Fire TV Glass](https://github.com/ivantrj/firetv-glass-launcher), developed while setting up a TV with [CleanYourTV](https://github.com/Gathin23/cleanyourtv).
 
-Glass is a small, fast home screen for the Fire TV Stick, plus scripts that switch off
-Amazon's telemetry, ad and preloaded packages over Wi-Fi. No root, nothing to sideload by
-hand, and no new apps beyond the launcher.
+**Tested:** Fire TV Stick Lite (2020), AFTSS / sheldon; Fire OS 7.7.1.7, firmware PS7717.5741N; Android 9 / SDK 28. Other models and firmware are unverified.
 
-[![Stock Fire TV home on the left, Glass on the right](docs/before-after.jpg)](docs/before-after.jpg)
+![Violet Horizon on a real Fire TV Stick Lite; location blurred](docs/violet-horizon/images/home-music.jpg)
 
-**Everything is reversible.** Packages are disabled with `pm disable-user`, never uninstalled.
-`./restore.sh` turns everything back on and gives Home back to Amazon's launcher.
+This **`violet-horizon` branch** contains the complete dashboard. The smaller offline compatibility contribution remains separate in [upstream PR #3](https://github.com/ivantrj/firetv-glass-launcher/pull/3).
 
-## Quick start
+## Features
 
-**Fire OS 7 / Android 9:** see [Fire OS 7 support](docs/fire-os7.md) for the
-opt-in source build and Windows setup. Tested on Fire TV Stick Lite (AFTSS),
-firmware PS7717.5741N. The standard build and shell scripts still target Fire OS 8.
+- Large local and analog clocks, date, India time and current offset difference, including daylight-saving changes.
+- Borderless weather: feels-like temperature, humidity, wind, high/low, sunrise and sunset.
+- Today's ISL, Premier League and Champions League football plus F1 sessions in local time; scores for live and finished football. Four events per page and a complete schedule view.
+- A 50 km overhead flight radar, nearby aircraft details and feed availability.
+- Optional Spotify Now Playing with artwork, title, artist and progress. Only long titles scroll; a local-time greeting returns when music stops.
+- A hidden four-shortcut dock and a quarter-screen app drawer. Both are translucent; the drawer is darker and dims widgets behind it further.
+- Inputs, Wi-Fi and Settings in one readable bottom pill.
+- A supplied purple twilight wallpaper, which pauses the optional animated artwork/app-color gradients.
 
-You need a Mac on the same Wi-Fi as your Fire TV. To build the launcher you also need
-[Android Studio](https://developer.android.com/studio) (install it and open it once).
+## Build and setup
 
-### 1. On the TV
+See the [step-by-step setup and undo guide](docs/violet-horizon/INSTALL.md). With JDK 17, Android SDK platform 35 and build-tools 35.0.0:
 
-1. Go to **Settings > My Fire TV > About** and click your device's name **7 times**.
-   You'll see "You are now a developer".
-2. Go back to **Settings > My Fire TV > Developer Options** and turn on **ADB debugging**.
-
-### 2. On your Mac
-
-1. [Download this project as a ZIP](https://github.com/ivantrj/firetv-glass-launcher/archive/refs/heads/main.zip)
-   and double-click it to unzip.
-2. Open the **Terminal** app, type `cd ` (with a space), drag the unzipped folder into the
-   Terminal window, and press Enter.
-3. Run the setup and follow what it says:
-
-   ```bash
-   ./setup.sh
-   ```
-
-   It asks for your TV's IP address and tells you where to find it on the TV. When the TV asks
-   **Allow USB debugging?**, tick **Always allow** and choose **OK**.
-
-### 3. Clean up the TV and install Glass
-
-```bash
-./debloat.sh
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File build-os7.ps1 -JdkHome '<JDK folder>' -SdkRoot '<Android SDK folder>'
 ```
 
-Switches off Amazon's ads, tracking and preinstalled extras.
+The script runs 50 Java checks, lint and assembly. Source is supplied, not an APK or signing key. This branch targets SDK 28 with `com.ivantrj.glasslauncher.os7`; it does not need the older `-PfireOs7=true` flag. Keep your own signing key for updates.
 
-```bash
-./install.sh
-```
-
-Installs Glass and makes it your home screen. That's it.
-
-If your TV later gets a new IP address, run `./setup.sh` again.
-
-## What's in the repo
-
-| Path | What it is |
+| Action | Remote |
 |---|---|
-| `setup.sh` | One-time setup: installs the TV helper, asks for your TV's IP, checks the connection |
-| `debloat.sh` | Disables everything in `debloat/disable-list.txt` (safe to re-run) |
-| `restore.sh` | Re-enables one package, or everything, and gives Home back to Amazon |
-| `install.sh` | Builds Glass, installs it, makes it the home screen |
-| `configure.sh` | Changes dock apps, hidden apps or the wallpaper without rebuilding |
-| `debloat/disable-list.txt` | Every package that gets disabled, by category, with notes |
-| `launcher/` | Glass source (Java, Android Studio / Gradle project) |
-| `tools/tv` | The ADB client all scripts use (see [Why not `adb`](#why-not-adb)) |
+| Reach four fixed shortcuts | Right across widgets, then Right at the right edge |
+| Expand all apps | Right again from the dock |
+| Browse apps | Up / Down |
+| Close panels | Left, Back or Home |
+| Reveal settings pill | Down from the dashboard |
+| Move between settings controls | Right |
+| Browse sport | Up from weather, then Up / Down through pages |
+| Show complete schedule | Select while sport is focused |
+| Open widget details or Spotify | Select on that widget |
 
-## What gets disabled
+Screenshots show the test owner's installed apps. Four private `files/dock.txt` entries define fixed favorites; these are not usage-history recents. Public fallback dock defaults remain upstream's. No streaming apps are installed by this theme.
 
-Full list with comments in [`debloat/disable-list.txt`](debloat/disable-list.txt). Edit it
-before running `./debloat.sh` if you want to keep something.
+## Privacy and limits
 
-- **Telemetry:** Minerva metrics, device logger, telemetry emitter, wireless metrics,
-  perf collection, ACR (content recognition).
-- **Content and ads:** recommendations, the sponsored screensaver (`kso.blackbird`),
-  ad-ID service, shopping, miniTV, Ambient Experience, sneak-peek previews.
-- **Background:** sharing proxy, Kindle connect, phone sign-in companion,
-  print and pro-tips stubs.
-- **Preloaded:** tutorials, Amazon Kids, game hub, website launcher.
-- **Personal picks** (remove the lines if you use them): HBO Max, Live TV, Amazon Music and
-  Photos, phone casting (Fling/DIAL), Miracast, the forced updater.
+This alternative launcher has network widgets and an optional Home redirect. CleanYourTV routes it to **SHOWCASE**, rather than its offline core or a drop-in theme JSON.
 
-Fire OS refuses to disable 8 "protected" packages (crash/log managers, `device.metrics`,
-the usage-stats proxy, ad deeplinking, csapp and the core OTA service). They're marked in the
-list. Updates can still arrive, and a Fire OS update may switch things back on. Run
-`./debloat.sh` again if that happens.
+The [detailed design and compatibility report](docs/violet-horizon/REPORT.md) includes screenshots, data destinations, permissions, refresh intervals, tests and known limits. Location/coordinates, keys, accounts, backups and raw screenshots are excluded. Public captures have the location label blurred.
 
-## The launcher
+Home takes roughly five seconds on the tested firmware; Amazon Home can appear temporarily. No root, protected permission grant or Amazon launcher disabling is used. Scores refresh about every two minutes while Home is visible; feed coverage is not guaranteed.
 
-[![Glass app grid](docs/grid.png)](docs/grid.png)
+## Credits and licence
 
-- **Top bar:** clock, greeting, Inputs, Wi-Fi and Settings.
-- **Dock:** your four favourite apps. The big title and the background glow follow the focused app.
-- **Grid:** every other app, alphabetical, 4 columns. Press Down from the dock.
-- **D-pad:** Up and Down always move exactly one row, and the ends of a row never jump elsewhere.
-- **Back** returns to the dock. **Home** while already on Glass does the same.
-- **Menu** (☰) on a tile opens that app's system page (force stop, clear cache, uninstall).
-- Remembers the last focused tile when you come back from an app.
-- Native Java + RecyclerView: about a 4 MB APK and 57 MB of RAM.
+- Fire TV Glass by ivantrj, [MIT](LICENSE).
+- CleanYourTV prompt and ADB helpers; provenance/licence under `tools/adb/`.
+- Outfit font and its included OFL notices.
+- Purple wallpaper generated with the built-in image generation tool; [prompt/provenance](assets/violet-horizon-prompt.md). No downloaded third-party wallpaper is redistributed.
+- Weather: Open-Meteo. Aircraft: ADSB.lol. Sport: ESPN public scoreboards. Spotify art/metadata comes from its local Android media session.
 
-### Customise
-
-All of these take effect immediately, no rebuild:
-
-```bash
-./configure.sh dock com.netflix.ninja com.stremio.one org.smarttube.beta com.spotify.tv.android
-```
-
-```bash
-./configure.sh hide org.videolan.vlc com.nordvpn.android
-```
-
-```bash
-./configure.sh wallpaper ~/Pictures/mountains.jpg   # scaled and dimmed; "none" for black
-```
-
-```bash
-./configure.sh apps    # list installed package names
-```
-
-`dock reset` and `hide reset` go back to the defaults in
-`launcher/app/src/main/res/values/config.xml`. Edit that file and run `./install.sh` to change
-the built-in defaults.
-
-## Undo
-
-One package:
-
-```bash
-./restore.sh com.amazon.tv.livetv
-```
-
-Everything, plus Home back to Amazon's launcher and Glass's Home-button service switched off:
-
-```bash
-./restore.sh
-```
-
-## How it works, and gotchas
-
-### Home on Fire OS 8
-
-Fire OS protects its launcher: `pm disable-user` is refused, and `cmd package set-home-activity`
-is accepted but ignored. So Glass includes a small accessibility service ("Glass Home button",
-switched on by `install.sh`). Whenever the Amazon launcher comes to the front (Home button,
-boot, an app exiting), it brings Glass straight back. It only listens to window events from
-the Amazon launcher's package; there's no polling.
-
-Side effects:
-
-- The Amazon home screen flashes for about 0.4 s before Glass appears.
-- Fire OS doesn't pass remote key presses to accessibility services, so Home can't be caught earlier.
-- You can't reach the Amazon home screen while it's on. Turn it off with `./restore.sh`, or in
-  **Settings > Accessibility**.
-
-### Why not `adb`
-
-On macOS the stock `adb` binary (and Xcode's Python) can get "No route to host" because of
-Local Network privacy, even with port 5555 open. `tools/tv` uses the `adb-shell` Python package
-instead, and pushes files as base64 chunks through the shell with an md5 check. If plain `adb`
-works for you, the scripts' commands work the same way with `adb shell`.
-
-```bash
-tools/tv shell 'pm list packages -d'
-```
-
-```bash
-tools/tv key DPAD_DOWN DPAD_CENTER
-```
-
-```bash
-tools/tv screencap shot.png
-```
-
-### One `pm` command per call
-
-Chaining `pm` commands in one shell call (`pm disable-user a; pm disable-user b`) can silently
-stop after the first, so every script runs them one at a time.
-
-## Tested on
-
-| Device | Fire OS | Chipset |
-|---|---|---|
-| Fire TV Stick 4K (AFTKRT) | Fire OS 8 (Android 11, API 30) | MediaTek |
-
-Other Fire OS 8 sticks should work. If you try one, open an issue or PR with what happened.
-
-## Related
-
-Built in the spirit of [CleanYourTV](https://github.com/Gathin23/cleanyourtv), which does the
-same for Android TV and Google TV sets.
-
-## License
-
-MIT, see [LICENSE](LICENSE). The **Outfit** font is © The Outfit Project Authors, SIL Open
-Font License 1.1 ([`OFL.txt`](launcher/app/src/main/assets/fonts/OFL.txt)).
+Violet Horizon additions are contributed under MIT. Third-party data, artwork and trademarks retain their owners' rights. No affiliation is claimed.

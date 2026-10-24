@@ -2,24 +2,25 @@ plugins {
     id 'com.android.application'
 }
 
-// Preserve the existing Fire OS 8 package unless the Android 9 port is requested.
-def fireOs7 = providers.gradleProperty('fireOs7').map { it.toBoolean() }.getOrElse(false)
-
 android {
     namespace 'com.ivantrj.glasslauncher'
     compileSdk 35
 
     defaultConfig {
-        applicationId fireOs7 ? 'com.ivantrj.glasslauncher.os7' : 'com.ivantrj.glasslauncher'
-        minSdk fireOs7 ? 28 : 30
+        applicationId 'com.ivantrj.glasslauncher.os7'
+        minSdk 28          // This separate port targets Fire OS 7 / Android 9.
         targetSdk 30
         versionCode 1
-        versionName fireOs7 ? '1.0-os7' : '1.0'
-        manifestPlaceholders = [glassLabel: fireOs7 ? 'Glass OS7' : 'Glass']
-        buildConfigField 'boolean', 'FIRE_OS_7', fireOs7.toString()
+        versionName '1.0-os7'
     }
 
-    buildFeatures { buildConfig true }
+    signingConfigs {
+        debug {
+            if (project.hasProperty('glassSigningStore')) {
+                storeFile file(project.property('glassSigningStore'))
+            }
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -29,8 +30,7 @@ android {
     lint {
         abortOnError true
         checkReleaseBuilds true
-        // Both device-specific builds deliberately retain target SDK 30.
-        // Keep NewApi checks enabled for the selected minimum SDK.
+        // This local device port deliberately retains target 30. NewApi remains enforced.
         disable 'ExpiredTargetSdkVersion'
     }
 }

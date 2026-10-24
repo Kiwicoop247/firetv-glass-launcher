@@ -1,0 +1,12 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="68dp" android:clipChildren="false">
+    <FrameLayout android:id="@+id/tile" android:layout_width="92dp" android:layout_height="52dp"
+        android:layout_marginStart="8dp" android:layout_marginTop="8dp" android:background="@drawable/tile_bg">
+        <ImageView android:id="@+id/banner" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" />
+        <ImageView android:id="@+id/icon" android:layout_width="34dp" android:layout_height="34dp"
+            android:layout_gravity="center" android:visibility="gone" />
+    </FrameLayout>
+    <TextView android:id="@+id/label" android:layout_width="104dp" android:layout_height="match_parent"
+        android:layout_marginStart="112dp" android:gravity="center_vertical" android:maxLines="2" android:ellipsize="end"
+        android:textColor="#E6FFFFFF" android:textSize="12sp" />
+</FrameLayout>

@@ -34,7 +34,7 @@ final class Tiles {
         View tile = cell.findViewById(R.id.tile);
         View label = cell.findViewById(R.id.label);
         float scale = focused ? FOCUS_SCALE : 1f;
-        float alpha = focused ? 1f : 0f;
+        float alpha = focused ? 1f : 0.7f;
         tile.animate().cancel();
         label.animate().cancel();
         if (animate) {

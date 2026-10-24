@@ -49,7 +49,7 @@ final class GridAdapter extends RecyclerView.Adapter<GridAdapter.Holder> {
 
     @NonNull @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tile, parent, false));
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_drawer_app, parent, false));
     }
 
     @Override

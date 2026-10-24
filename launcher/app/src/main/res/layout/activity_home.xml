@@ -1,153 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Designed on the 960x540dp canvas of a 1080p Fire TV (density 320).
-     Everything that moves when you press Down lives inside @id/page. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black"
-    android:clipChildren="false">
-
-    <ImageView
-        android:id="@+id/wallpaper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
-
-    <FrameLayout
-        android:id="@+id/page"
-        android:layout_width="match_parent"
-        android:layout_height="1080dp"
-        android:clipChildren="false"
-        android:clipToPadding="false">
-
-        <!-- Ambient glow: a circle squashed into an ellipse behind the dock (scaleY set in code) -->
-        <View
-            android:id="@+id/glow"
-            android:layout_width="match_parent"
-            android:layout_height="960dp"
-            android:layout_marginTop="-42dp" />
-
-        <View
-            android:id="@+id/band"
-            android:layout_width="840dp"
-            android:layout_height="162dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="357dp"
-            android:background="@drawable/band_bg" />
-
-        <com.ivantrj.glasslauncher.GlassHighlight
-            android:id="@+id/highlight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="82dp"
-            android:layout_marginTop="34dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/greeting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#B3FFFFFF"
-                android:textSize="19sp" />
-
-            <TextClock
-                android:id="@+id/clock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="-4dp"
-                android:layout_marginTop="-10dp"
-                android:format12Hour="h:mm"
-                android:format24Hour="HH:mm"
-                android:includeFontPadding="false"
-                android:textColor="#FFFFFFFF"
-                android:textSize="100sp" />
-
-            <TextClock
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:format12Hour="EEEE, d MMMM"
-                android:format24Hour="EEEE, d MMMM"
-                android:textColor="#99FFFFFF"
-                android:textSize="19sp" />
+<?xml version='1.0' encoding='utf-8'?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#0B1018" android:clipChildren="false">
+    <ImageView android:id="@+id/wallpaper" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:visibility="gone" />
+    <com.ivantrj.glasslauncher.FlowingBackground android:id="@+id/flowingBackground" android:layout_width="match_parent" android:layout_height="match_parent" android:importantForAccessibility="no" />
+    <FrameLayout android:id="@+id/page" android:layout_width="match_parent" android:layout_height="match_parent" android:clipChildren="false" android:clipToPadding="false">
+        <View android:id="@+id/glow" android:layout_width="match_parent" android:layout_height="960dp" android:visibility="gone" />
+        <View android:id="@+id/band" android:layout_width="840dp" android:layout_height="162dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="357dp" android:background="@drawable/band_bg" android:visibility="gone" />
+        <LinearLayout android:id="@+id/sportsPanel" android:layout_width="280dp" android:layout_height="260dp" android:layout_marginStart="24dp" android:layout_marginTop="24dp" android:padding="14dp" android:orientation="vertical" android:background="@drawable/sports_panel_bg">
+            <TextView android:id="@+id/sportsHeading" style="@style/DashboardSmall" android:layout_width="match_parent" android:text="TODAY'S SPORT" android:textSize="13sp" android:textColor="#E6FFFFFF" />
+            <LinearLayout android:id="@+id/sportsRows" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="8dp" android:orientation="vertical" />
+            <TextView android:id="@+id/sportsStatus" android:maxLines="1" android:ellipsize="end" style="@style/DashboardSmall" android:layout_width="match_parent" android:text="Loading schedule…" android:textSize="9sp" android:textColor="#B3FFFFFF" />
+            <TextView android:id="@+id/sportsHint" android:singleLine="true" android:ellipsize="end" style="@style/DashboardSmall" android:layout_width="match_parent" android:text="Up · browse     Select · all events" android:textSize="9sp" android:textColor="#99FFFFFF" android:layout_marginTop="4dp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/dockTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="84dp"
-            android:layout_marginTop="282dp"
-            android:includeFontPadding="false"
-            android:singleLine="true"
-            android:textColor="#F2FFFFFF"
-            android:textSize="50sp" />
-
-        <LinearLayout
-            android:id="@+id/dockRow"
-            android:layout_width="816dp"
-            android:layout_height="144dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="367dp"
-            android:clipChildren="false"
-            android:orientation="horizontal" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/grid"
-            android:layout_width="816dp"
-            android:layout_height="516dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="531dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="false"
-            android:overScrollMode="never"
-            android:paddingBottom="24dp"
-            android:scrollbars="none" />
-
-        <LinearLayout
-            android:id="@+id/pills"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginTop="42dp"
-            android:layout_marginEnd="84dp"
-            android:clipChildren="false"
-            android:orientation="horizontal">
-
-            <LinearLayout android:id="@+id/pillInputs" style="@style/Pill">
-                <ImageView style="@style/PillIcon" android:src="@drawable/ic_input" />
-                <TextView style="@style/PillText" android:text="@string/inputs" />
-            </LinearLayout>
-
-            <LinearLayout android:id="@+id/pillWifi" style="@style/Pill">
-                <ImageView style="@style/PillIcon" android:src="@drawable/ic_wifi" />
-                <TextView android:id="@+id/wifiName" style="@style/PillText" android:text="Wi-Fi" />
-            </LinearLayout>
-
-            <LinearLayout android:id="@+id/pillSettings" style="@style/Pill">
-                <ImageView style="@style/PillIcon" android:src="@drawable/ic_settings" />
-                <TextView style="@style/PillText" android:text="@string/settings" />
+        <LinearLayout android:id="@+id/weatherPanel" android:layout_width="280dp" android:layout_height="216dp" android:layout_marginStart="24dp" android:layout_marginTop="300dp" android:padding="22dp" android:orientation="vertical" android:paddingTop="0dp" android:paddingBottom="0dp">
+            <TextView android:id="@+id/weatherTemp" style="@style/DashboardSmall" android:text="--°" android:textSize="64sp" android:includeFontPadding="false" />
+            <TextView android:id="@+id/weatherSummary" style="@style/DashboardSmall" android:text="Connecting…" android:textSize="16sp" />
+            <TextView android:id="@+id/weatherFeels" style="@style/DashboardSmall" android:layout_marginTop="4dp" android:textColor="#CCFFFFFF" android:textSize="13sp" />
+            <TextView android:id="@+id/weatherWind" style="@style/DashboardSmall" android:textColor="#CCFFFFFF" android:textSize="13sp" />
+            <TextView android:id="@+id/weatherRange" style="@style/DashboardSmall" android:textColor="#CCFFFFFF" android:textSize="13sp" />
+            <TextView android:id="@+id/weatherUpdated" style="@style/DashboardSmall" android:layout_marginTop="5dp" android:text="Open-Meteo" android:textColor="#99FFFFFF" android:textSize="10sp" />
+        </LinearLayout>
+        <TextClock android:id="@+id/date" style="@style/DashboardSmall" android:layout_marginStart="330dp" android:layout_marginTop="42dp" android:format12Hour="EEE, d MMM" android:format24Hour="EEE, d MMM" android:textColor="#B3FFFFFF" android:textSize="15sp" />
+        <com.ivantrj.glasslauncher.DashboardClock android:id="@+id/analogClock" android:layout_width="196dp" android:layout_height="196dp" android:layout_marginStart="322dp" android:layout_marginTop="92dp" />
+        <TextView android:id="@+id/localPlace" style="@style/DashboardSmall" android:layout_marginStart="550dp" android:layout_marginTop="42dp" android:text="LOCAL TIME" android:textSize="12sp" android:textColor="#B3FFFFFF" />
+        <TextClock android:id="@+id/clock" style="@style/DashboardSmall" android:layout_width="162dp" android:layout_height="116dp" android:layout_marginStart="540dp" android:layout_marginTop="68dp" android:format12Hour="hh" android:format24Hour="HH" android:includeFontPadding="false" android:textSize="106sp" android:textColor="#D6DFFE" />
+        <TextClock android:id="@+id/clockMinutes" style="@style/DashboardSmall" android:layout_width="162dp" android:layout_height="116dp" android:layout_marginStart="540dp" android:layout_marginTop="184dp" android:format12Hour="mm" android:format24Hour="mm" android:includeFontPadding="false" android:textSize="106sp" android:textColor="#86A8C3F7" />
+        <TextClock android:id="@+id/clockPeriod" style="@style/DashboardSmall" android:layout_marginStart="700dp" android:layout_marginTop="278dp" android:format12Hour="a" android:format24Hour=" " android:textSize="13sp" android:textColor="#B3FFFFFF" />
+        <TextView android:id="@+id/indiaTime" style="@style/DashboardSmall" android:layout_marginStart="330dp" android:layout_marginTop="356dp" android:textSize="17sp" android:textColor="#E6FFFFFF" />
+        <TextView android:id="@+id/sunTimes" style="@style/DashboardSmall" android:layout_marginStart="330dp" android:layout_marginTop="388dp" android:text="Sunrise --:--   ·   Sunset --:--" android:textSize="12sp" android:textColor="#B3FFFFFF" />
+        <LinearLayout android:id="@+id/pillNowPlaying" android:layout_width="384dp" android:layout_height="80dp" android:layout_marginStart="330dp" android:layout_marginTop="436dp" android:orientation="horizontal" android:gravity="center_vertical" android:padding="8dp" android:background="@drawable/now_playing_bg" android:visibility="gone">
+            <ImageView android:id="@+id/albumArt" android:layout_width="54dp" android:layout_height="54dp" android:layout_marginEnd="12dp" android:scaleType="centerCrop" android:background="@drawable/album_art_bg" android:clipToOutline="true" android:contentDescription="@string/album_art" />
+            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:orientation="vertical">
+                <TextView android:id="@+id/playingLabel" style="@style/DashboardSmall" android:visibility="gone" android:text="@string/now_playing_spotify" />
+                <com.ivantrj.glasslauncher.ScrollingSongView android:id="@+id/playingSong" android:layout_width="match_parent" android:layout_height="24dp" />
+                <TextView android:id="@+id/playingArtist" style="@style/DashboardSmall" android:layout_width="match_parent" android:singleLine="true" android:ellipsize="end" android:textSize="11sp" android:textColor="#CCFFFFFF" />
+                <TextView android:id="@+id/playingAlbum" style="@style/DashboardSmall" android:visibility="gone" />
+                <com.ivantrj.glasslauncher.PlaybackProgressView android:id="@+id/playingProgress" android:layout_width="match_parent" android:layout_height="18dp" />
             </LinearLayout>
         </LinearLayout>
+        <TextView android:id="@+id/musicIdle" style="@style/DashboardSmall" android:layout_width="384dp" android:layout_height="80dp" android:layout_marginStart="330dp" android:layout_marginTop="436dp" android:gravity="center_vertical" android:text="GOOD EVENING BOYS" android:textSize="25sp" android:textColor="#CCFFFFFF" android:letterSpacing="0.05" />
+        <LinearLayout android:id="@+id/radarPanel" android:layout_width="198dp" android:layout_height="492dp" android:layout_marginStart="738dp" android:layout_marginTop="24dp" android:orientation="vertical" android:padding="16dp">
+            <TextView style="@style/DashboardSmall" android:text="OVERHEAD" android:textSize="10sp" android:textColor="#B3FFFFFF" />
+            <com.ivantrj.glasslauncher.FlightRadarView android:id="@+id/flightRadar" android:layout_width="match_parent" android:layout_height="218dp" />
+            <TextView android:id="@+id/flightCallsign" style="@style/DashboardSmall" android:layout_width="match_parent" android:singleLine="true" android:ellipsize="end" android:text="Connecting…" android:textSize="22sp" />
+            <TextView android:id="@+id/flightDetails" style="@style/DashboardSmall" android:layout_width="match_parent" android:textSize="12sp" android:textColor="#CCFFFFFF" />
+            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1" />
+            <TextView android:id="@+id/flightStatus" style="@style/DashboardSmall" android:layout_width="match_parent" android:text="50 km radius" android:textSize="10sp" android:textColor="#99FFFFFF" />
+            <TextView style="@style/DashboardSmall" android:text="ADSB.lol · select for details" android:textSize="8sp" android:textColor="#80FFFFFF" />
+        </LinearLayout>
+        <TextView android:id="@+id/dockTitle" style="@style/DashboardSmall" android:visibility="gone" android:layout_marginStart="84dp" android:layout_marginTop="339dp" android:singleLine="true" android:textSize="14sp" android:textColor="#B3FFFFFF" />
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/inputsMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/menu_bg"
-        android:minWidth="220dp"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:visibility="gone" />
+    <FrameLayout android:id="@+id/recentPanel" android:layout_width="156dp" android:layout_height="match_parent" android:layout_gravity="end" android:background="@drawable/recent_panel_bg" android:visibility="invisible" android:clipChildren="false">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="30dp" android:text="QUICK APPS" android:textSize="13sp" android:textColor="#CCFFFFFF" android:gravity="center" />
+        <LinearLayout android:id="@+id/dockRow" android:layout_width="128dp" android:layout_height="416dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="68dp" android:clipChildren="false" android:orientation="vertical" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginBottom="17dp" android:text="Right · all apps" android:textSize="10sp" android:textColor="#99FFFFFF" android:gravity="center" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/drawerPanel" android:layout_width="240dp" android:layout_height="match_parent" android:layout_gravity="end" android:background="@drawable/sidebar_bg" android:visibility="invisible" android:clipChildren="false">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:layout_marginStart="20dp" android:text="ALL APPS" android:textSize="16sp" android:textColor="#E6FFFFFF" />
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/grid" android:layout_width="216dp" android:layout_height="430dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="65dp" android:clipChildren="true" android:clipToPadding="true" android:descendantFocusability="blocksDescendants" android:focusable="false" android:overScrollMode="never" android:paddingBottom="8dp" android:scrollbars="none" android:paddingTop="4dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginBottom="15dp" android:text="Up/Down · browse    Left · home" android:textSize="9sp" android:textColor="#99FFFFFF" android:gravity="center" />
+    </FrameLayout>
+    <LinearLayout android:id="@+id/pills" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom|center_horizontal" android:layout_marginTop="0dp" android:layout_marginEnd="0dp" android:clipChildren="false" android:orientation="horizontal" android:layout_marginBottom="22dp" android:visibility="invisible" android:background="@drawable/settings_popout_bg" android:padding="12dp" android:gravity="center_vertical" android:elevation="12dp">
+        <LinearLayout android:id="@+id/pillInputs" style="@style/Pill" android:background="@android:color/transparent" android:layout_marginStart="4dp" android:layout_marginEnd="4dp">
+            <ImageView style="@style/PillIcon" android:src="@drawable/ic_input" />
+            <TextView style="@style/PillText" android:text="@string/inputs" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/pillWifi" style="@style/Pill" android:background="@android:color/transparent" android:layout_marginStart="4dp" android:layout_marginEnd="4dp">
+            <ImageView style="@style/PillIcon" android:src="@drawable/ic_wifi" />
+            <TextView android:id="@+id/wifiName" style="@style/PillText" android:text="Wi-Fi" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/pillSettings" style="@style/Pill" android:background="@android:color/transparent" android:layout_marginStart="4dp" android:layout_marginEnd="4dp">
+            <ImageView style="@style/PillIcon" android:src="@drawable/ic_settings" />
+            <TextView style="@style/PillText" android:text="@string/settings" />
+        </LinearLayout>
+    </LinearLayout>
+    <com.ivantrj.glasslauncher.GlassHighlight android:id="@+id/highlight" android:elevation="16dp" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <LinearLayout android:id="@+id/inputsMenu" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/menu_bg" android:minWidth="220dp" android:orientation="vertical" android:padding="8dp" android:visibility="gone" />
 </FrameLayout>

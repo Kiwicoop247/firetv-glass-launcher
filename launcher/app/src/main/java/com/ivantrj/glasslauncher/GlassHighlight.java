@@ -62,7 +62,7 @@ public class GlassHighlight extends View {
         shaderMatrix.postTranslate(0, rect.top);
         sheen.setLocalMatrix(shaderMatrix);
         float r = radius.value();
-        canvas.drawRoundRect(rect, r, r, fill);
+        // Border only: content stays crisp when focus moves over dashboard and drawer.
         canvas.drawRoundRect(rect, r, r, rim);
     }
 }
